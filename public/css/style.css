@@ -1,0 +1,73 @@
+html, body {
+    background-color: #ffbf66;
+    height: 100%;
+    font-family: 'Cherry Swash', serif;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+nav {
+    margin: 1%;
+    border-radius: 10px;
+    color: #08c5d1;
+}
+
+.nav-link {
+    margin: 1%;
+}
+
+main {
+    margin: 1%;
+    
+}
+
+.card-body {
+    color: #08c5d1;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.btn {
+    background-color: #08c5d1;
+    color: white;
+    
+}
+
+.btn:hover {
+    color: #08c5d1;
+    background-color: white;
+}
+
+.restauration {
+    margin-top: 1.5%;    
+}
+
+.mb:hover {
+
+    color: white;
+}
+
+footer {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 2%;
+    background-color:white ;
+    border-radius: 10px;
+}
+
+.contact-info, .legal-notice, .site-map {
+    padding: 1%;
+}
+
+.site-map, li, a {
+    text-decoration: none;
+    list-style: none;
+    color: black;
+    
+}
+
