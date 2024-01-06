@@ -30,6 +30,12 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'vers_registration_register', methods: ['GET', 'POST'])]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()) 
+        {
+
+            return $this->redirectToRoute('vers_accueil_index');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -99,7 +105,7 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre email a bien été vérifié, Vous pouvez vous connecter maintenant.');
 
-        return $this->redirectToRoute('vers_accueil_index');
+        return $this->redirectToRoute('vers_authenticator_login');
     }
     // #[Route('/register/waiting-for-email-confirmation', name: 'chemin_registration_waiting_for_email_confirmation', methods: ['GET'])]
     // public function waitingForEmailConfirmation(): Response 
