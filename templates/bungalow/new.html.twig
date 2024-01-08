@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New Bungalow</title>
+
+{% block body %}
+    <h1>Create new Bungalow</h1>
+
+    {{ include('bungalow/_form.html.twig') }}
+
+    <a href="{{ path('app_bungalow_index') }}">retour à la liste</a>
+{% endblock %}

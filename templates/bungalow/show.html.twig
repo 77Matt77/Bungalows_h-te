@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<title>Bungalow</title>
+
+{% block body %}
+    <h1>Bungalow</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bungalow.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ bungalow.nom }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ bungalow.description }}</td>
+            </tr>
+            <tr>
+                <th>Capaciter</th>
+                <td>{{ bungalow.capaciter }}</td>
+            </tr>
+            <tr>
+                <th>PrixParNuit</th>
+                <td>{{ bungalow.prixParNuit }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bungalow_index') }}">retour à la liste</a>
+
+    <a href="{{ path('app_bungalow_edit', {'id': bungalow.id}) }}">edit</a>
+
+    {{ include('bungalow/_delete_form.html.twig') }}
+{% endblock %}

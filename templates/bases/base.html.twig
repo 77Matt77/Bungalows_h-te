@@ -41,7 +41,8 @@
         {# titre #}
 		<title>Document</title>
 	</head>
-	<body>
+	<body>		
+	
 		<nav class="navbar navbar-expand-lg bg-body-tertiary ">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="{{path("vers_accueil_index")}}"><img src="{{asset("img/logo.jpg")}}" alt="logo"></a>
@@ -55,31 +56,47 @@
 						</li>
 					</ul>
 					<ul class="navbar-nav ms-auto" style="margin-right: 3%;" >
-					{% if app.user %}
-						<li class="nav-item">
-							<a class="nav-link" href="{{path("app_logout")}}">Déconnectez-vous</a>
-						</li>
-					{% else %}
-						<li class="nav-item" >
-							<a class="nav-link" href="{{path("vers_registration_register")}} ">Inscrivez-vous</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{path("vers_authenticator_login")}}">Connectez-vous</a>
-						</li>
-					{% endif %}					
+						{% if app.user %}
+
+							{% if is_granted("ROLE_ADMIN") %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{path("admin_home_index")}}">Espace admin</a>
+								</li>								
+							{% endif %}
+															
+							{% if is_granted("ROLE_USER") %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{path("user_home_index")}}">Espace user</a>
+								</li>							
+							{% endif %}
+							
+								<li class="nav-item">
+									<a class="nav-link" href="{{path("app_logout")}}">Déconnexion</a>
+								</li>
+								{% else %}
+								<li class="nav-item mx-3 " >
+									<a class="nav-link" href="{{path("vers_registration_register")}} ">Inscription</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{path("vers_authenticator_login")}}">Connexion</a>
+								</li>
+						{% endif %}
+
 						
 					</ul>
+					
 				</div>
 			</div>
 		</nav>
+	
 
-		{% block main %}
+		{% block main %}{% endblock %}
 			
-		{% endblock %}
+		
 
-		{% block footer %}
+		{% block footer %}{% endblock %}
 			
-		{% endblock %}
+		
 		
 		
 	</body>
