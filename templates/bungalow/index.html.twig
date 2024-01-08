@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<title>Bungalow index</title>
+
+{% block body %}
+    <h1>Bungalow index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>nom</th>
+                <th>Description</th>
+                <th>capaciter</th>
+                <th>prixparnuit</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bungalow in bungalows %}
+            <tr>
+                <td>{{ bungalow.id }}</td>
+                <td>{{ bungalow.nom }}</td>
+                <td>{{ bungalow.description }}</td>
+                <td>{{ bungalow.capaciter }}</td>
+                <td>{{ bungalow.prixParNuit }}</td>
+                <td>
+                    <a href="{{ path('app_bungalow_show', {'id': bungalow.id}) }}">show</a>
+                    <a href="{{ path('app_bungalow_edit', {'id': bungalow.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bungalow_new') }}">Create new</a>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BungalowRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,11 +31,18 @@ class Bungalow
     #[ORM\ManyToOne(inversedBy: 'Bungalow')]
     private ?Reservation $reservation = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Image $Image = null;
+    
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Calendrier $Calendrier = null;
+
+    #[ORM\OneToMany(mappedBy: 'bungalow', targetEntity: Image::class)]
+    private Collection $Image;
+
+    public function __construct()
+    {
+        $this->Image = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,17 +109,7 @@ class Bungalow
         return $this;
     }
 
-    public function getImage(): ?Image
-    {
-        return $this->Image;
-    }
-
-    public function setImage(?Image $Image): static
-    {
-        $this->Image = $Image;
-
-        return $this;
-    }
+    
 
     public function getCalendrier(): ?Calendrier
     {
@@ -120,6 +119,36 @@ class Bungalow
     public function setCalendrier(?Calendrier $Calendrier): static
     {
         $this->Calendrier = $Calendrier;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImage(): Collection
+    {
+        return $this->Image;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->Image->contains($image)) {
+            $this->Image->add($image);
+            $image->setBungalow($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->Image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getBungalow() === $this) {
+                $image->setBungalow(null);
+            }
+        }
 
         return $this;
     }

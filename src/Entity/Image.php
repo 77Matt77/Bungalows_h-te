@@ -19,6 +19,9 @@ class Image
     #[ORM\Column(length: 255)]
     private ?string $chemin = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Image')]
+    private ?Bungalow $bungalow = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Image
     public function setChemin(string $chemin): static
     {
         $this->chemin = $chemin;
+
+        return $this;
+    }
+
+    public function getBungalow(): ?Bungalow
+    {
+        return $this->bungalow;
+    }
+
+    public function setBungalow(?Bungalow $bungalow): static
+    {
+        $this->bungalow = $bungalow;
 
         return $this;
     }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Bungalow</title>
+
+{% block body %}
+    <h1>Edit Bungalow</h1>
+
+    {{ include('bungalow/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_bungalow_index') }}">retour à la liste</a>
+
+    {{ include('bungalow/_delete_form.html.twig') }}
+{% endblock %}
