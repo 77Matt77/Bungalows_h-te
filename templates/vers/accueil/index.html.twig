@@ -8,10 +8,10 @@
 
     <h1 class="text-center">Bungalows d'hôtes</h1>
 
-    <div class="row">
+    <div class="row mt-3">
         {% for bungalow in bungalows %}
-        <div class="col col-sm-6 col-md-6 col-lg-4">
-            <div class="card h-100">
+        <div class="col col-sm-6 col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 mx-2">
                 {% for image in bungalow.images %}
     				<img src="{{ asset('images/' ~ image.nom) }}" alt="Image">
 				{% endfor %}
@@ -48,6 +48,30 @@
         </div>
         {% endfor %}
     </div>
+  <div class="card mb-3" style="max-width: 70%; margin-left: 15%;" >
+  <div class="row" >
+    <div class="col-md-3 mg-3">
+      <img src="{{ asset('salle_a_manger_cuisine.jpg') }}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body" style="max-height: 400px;">
+        <h5 class="card-title mx-4">Découvrez la délicieuse cuisine polynésienne Authentique et internationale, dans notre restaurant en bord du Lagon.</h5>
+        <p class="card-text mx-4">Plongez dans une expérience culinaire immersive en savourant notre délicieuse cuisine polynésienne, mettant en valeur des saveurs exotiques et des ingrédients locaux frais. 
+        Laissez-vous emporter par un voyage gustatif unique au cœur du Pacifique. 
+
+Notre restaurant en bord du lagon offre une variété internationale de plats exquis, répondant aux goûts de chaque convive. 
+Que vous soyez amateur de plats locaux ou de mets internationaux, notre menu diversifié saura satisfaire toutes les papilles. 
+
+Optez pour la formule demi-pension et libérez-vous du souci des repas. 
+Profitez de déjeuners délicieux et de dîners exquis, laissant ainsi plus de temps pour explorer les merveilles de l'île et vous détendre sans contraintes. 
+
+Choisissez la formule tout inclus pour une expérience sans souci. 
+Avec des déjeuners copieux et des dîners gastronomiques à midi et le soir, vous pourrez vous concentrer pleinement sur la détente et la découverte.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 </main>
 
