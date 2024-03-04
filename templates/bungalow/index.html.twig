@@ -1,41 +1,46 @@
-<!DOCTYPE html>
+{% extends "bases/admin.html.twig" %}
 
-<title>Bungalow index</title>
-
-{% block body %}
-    <h1>Bungalow index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>nom</th>
-                <th>Description</th>
-                <th>capaciter</th>
-                <th>prixparnuit</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for bungalow in bungalows %}
-            <tr>
-                <td>{{ bungalow.id }}</td>
-                <td>{{ bungalow.nom }}</td>
-                <td>{{ bungalow.description }}</td>
-                <td>{{ bungalow.capaciter }}</td>
-                <td>{{ bungalow.prixParNuit }}</td>
-                <td>
-                    <a href="{{ path('app_bungalow_show', {'id': bungalow.id}) }}">show</a>
-                    <a href="{{ path('app_bungalow_edit', {'id': bungalow.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_bungalow_new') }}">Create new</a>
+{% block title %}Liste des Bungalows
 {% endblock %}
+
+{% block description %}Liste des Bungalows
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <h1 class="text-center my-5 display-4">Espace Bungalows</h1>
+        
+        <a href="{{ path('app_bungalow_new') }}" class="btn btn-primary mb-4">Création d'un nouveau bungalow</a>
+
+        <div class="row">
+            {% for bungalow in bungalows %}
+                <div class="col-md-4 mt-4">
+                    <div class="card h-100">
+                         {% for image in bungalow.images %}
+                            <img src="{{ asset('images/' ~ image.nom) }}" alt="{{ bungalow.name }}" class="card-img-top img-thumbnail" style="max-width: 500px;">
+                         {% endfor %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ bungalow.name }}</h5>
+                            <p class="card-text">{{ bungalow.description }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Capacité:</strong> {{ bungalow.capaciter }}</li>
+                            <li class="list-group-item"><strong>Prix par Nuit:</strong> {{ bungalow.pricePerNight }}€</li>
+                            <li class="list-group-item"><strong>Activation:</strong> {% if bungalow.activation %} Oui {% else %} Non {% endif %}</li>
+                        </ul>
+                        <div class="card-body">
+                            <a href="{{ path('app_bungalow_show', {'id': bungalow.id}) }}" class="btn btn-outline-info w-100 my-2">Voir</a>
+                            <a href="{{ path('app_bungalow_edit', {'id': bungalow.id}) }}" class="btn btn-outline-primary w-100 my-2">Modifier</a>
+                            {{ include('bungalow/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <p class="text-center">Aucun enregistrement trouvé</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

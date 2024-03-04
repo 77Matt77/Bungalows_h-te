@@ -3,9 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ReservationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
@@ -16,50 +13,58 @@ class Reservation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateArrive = null;
+    #[ORM\Column(name: "date_arriver", type: "datetime")]
+    private ?\DateTimeInterface $dateArriver = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(name: "date_depart", type: "datetime")]
     private ?\DateTimeInterface $dateDepart = null;
 
-    #[ORM\Column]
-    private ?int $nombreDePersonne = null;
+    #[ORM\Column(name: "nombre_de_personne")]
+    private ?int $numberOfPeople = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Reservation')]
+    #[ORM\ManyToOne(targetEntity: Commande::class)]
+    #[ORM\JoinColumn(name: "commande_id", referencedColumnName: "id")]
     private ?Commande $commande = null;
 
-   
+    #[ORM\ManyToOne(targetEntity: Formule::class)]
+    #[ORM\JoinColumn(name: "formule_id", referencedColumnName: "id")]
+    private ?Formule $formule = null;
 
+    #[ORM\ManyToOne(targetEntity: Option::class)]
+    #[ORM\JoinColumn(name: "option_reservation_id", referencedColumnName: "id")]
+    private ?Option $optionReservation = null;
 
-    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Bungalow::class)]
-    private Collection $Bungalow;
-
-    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'reservations')]
-    private Collection $options;
-
-    #[ORM\ManyToOne(inversedBy: 'reservations')]
-    private ?Formule $Formule = null;
-
-    public function __construct()
-    {
-        
-        $this->Bungalow = new ArrayCollection();
-        $this->options = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity="Bungalow", inversedBy="reservations")
+     * @ORM\JoinColumn(name="bungalow_id", referencedColumnName="id")
+     */
+    private ?Bungalow $bungalow = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDateArrive(): ?\DateTimeInterface
+    public function getDateArriver(): ?\DateTimeInterface
     {
-        return $this->dateArrive;
+        return $this->dateArriver;
     }
 
-    public function setDateArrive(\DateTimeInterface $dateArrive): static
+    public function setDateArriver(\DateTimeInterface $dateArriver): static
     {
-        $this->dateArrive = $dateArrive;
+        $this->dateArriver = $dateArriver;
+
+        return $this;
+    }
+
+    public function getNumberOfPeople(): ?int
+    {
+        return $this->numberOfPeople;
+    }
+
+    public function setNumberOfPeople(int $numberOfPeople): static
+    {
+        $this->numberOfPeople = $numberOfPeople;
 
         return $this;
     }
@@ -76,18 +81,6 @@ class Reservation
         return $this;
     }
 
-    public function getNombreDePersonne(): ?int
-    {
-        return $this->nombreDePersonne;
-    }
-
-    public function setNombreDePersonne(int $nombreDePersonne): static
-    {
-        $this->nombreDePersonne = $nombreDePersonne;
-
-        return $this;
-    }
-
     public function getCommande(): ?Commande
     {
         return $this->commande;
@@ -100,68 +93,38 @@ class Reservation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Bungalow>
-     */
-    public function getBungalow(): Collection
-    {
-        return $this->Bungalow;
-    }
-
-    public function addBungalow(Bungalow $bungalow): static
-    {
-        if (!$this->Bungalow->contains($bungalow)) {
-            $this->Bungalow->add($bungalow);
-            $bungalow->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBungalow(Bungalow $bungalow): static
-    {
-        if ($this->Bungalow->removeElement($bungalow)) {
-            // set the owning side to null (unless already changed)
-            if ($bungalow->getReservation() === $this) {
-                $bungalow->setReservation(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Option>
-     */
-    public function getOptions(): Collection
-    {
-        return $this->options;
-    }
-
-    public function addOption(Option $option): static
-    {
-        if (!$this->options->contains($option)) {
-            $this->options->add($option);
-        }
-
-        return $this;
-    }
-
-    public function removeOption(Option $option): static
-    {
-        $this->options->removeElement($option);
-
-        return $this;
-    }
-
     public function getFormule(): ?Formule
     {
-        return $this->Formule;
+        return $this->formule;
     }
 
-    public function setFormule(?Formule $Formule): static
+    public function setFormule(?Formule $formule): static
     {
-        $this->Formule = $Formule;
+        $this->formule = $formule;
+
+        return $this;
+    }
+
+    public function getOptionReservation(): ?Option
+    {
+        return $this->optionReservation;
+    }
+
+    public function setOptionReservation(?Option $optionReservation): static
+    {
+        $this->optionReservation = $optionReservation;
+
+        return $this;
+    }
+
+    public function getBungalow(): ?Bungalow
+    {
+        return $this->bungalow;
+    }
+
+    public function setBungalow(?Bungalow $bungalow): static
+    {
+        $this->bungalow = $bungalow;
 
         return $this;
     }

@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
+use App\Form\ImageType;
 use App\Entity\Bungalow;
 use App\Form\BungalowType;
 use App\Repository\BungalowRepository;
+use App\Repository\ImageRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /*
  MODEL (MVC)
  Entity = table
@@ -19,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/bungalow')]
 class BungalowController extends AbstractController
 {
-    #[Route('/', name: 'app_bungalow_index', methods: ['GET'])]
+    #[Route('/bungalow', name: 'admin_bungalow_index', methods: ['GET'])]
     public function index(BungalowRepository $bungalowRepository): Response
     {
         return $this->render('bungalow/index.html.twig', [
@@ -38,7 +41,7 @@ class BungalowController extends AbstractController
             $entityManager->persist($bungalow);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_bungalow_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_bungalow_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bungalow/new.html.twig', [
@@ -47,6 +50,55 @@ class BungalowController extends AbstractController
         ]);
     }
 
+
+
+    #[Route('/images/{id}', name: 'app_bungalow_images', methods: ['GET', 'POST'])]
+    public function image(Bungalow $bungalow,Request $request, EntityManagerInterface $entityManager, ImageRepository $imageRepository): Response
+    {
+        $images = $imageRepository->findBy(['bungalow' => $bungalow]);
+        $image = new Image();
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $imageFile = $form->get('nom')->getData();
+            /*
+                S'il n'y a pas de chargement de fichier, $imageFile = null
+                S'il y a un chargement de fichier, $imageFile retourne un objet de la class UploadedFile
+
+            */
+
+            if ($imageFile) {
+                // 1e - Définir le nom du fichier
+                $nomImage = date('YmdHis') . '-' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
+            
+                // 2e - Enregistrer le fichier dans le dossier public sous le nom crée avant
+                $imageFile->move(
+                    $this->getParameter('bungalow'),
+                    $nomImage
+                );
+            
+                // 3e - Enregistrer le nom du fichier dans l'objet en bdd
+                $image->setNom($nomImage);
+            }
+            $image->setBungalow($bungalow);
+            $entityManager->persist($image);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_bungalow_image', ['id' => $bungalow->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('bungalow/images.html.twig', [
+            'bungalow' => $bungalow,
+            'form' => $form,
+            'images' => $images
+        ]);
+    }
+    
+    
+    
+    
     #[Route('/{id}', name: 'app_bungalow_show', methods: ['GET'])]
     public function show(Bungalow $bungalow): Response
     {
@@ -64,7 +116,7 @@ class BungalowController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_bungalow_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_bungalow_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bungalow/edit.html.twig', [
@@ -81,6 +133,6 @@ class BungalowController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_bungalow_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_bungalow_index', [], Response::HTTP_SEE_OTHER);
     }
 }

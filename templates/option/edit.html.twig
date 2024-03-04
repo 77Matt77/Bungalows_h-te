@@ -1,0 +1,18 @@
+{% extends "bases/admin.html.twig" %}
+
+{% block title %}Modifier une option{% endblock %}
+
+{% block description %}Modifier une option{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center mb-4">Modifier l'Option</h1>
+                {{ include('option/_form.html.twig', {'button_label': 'Update'}) }}
+                <a href="{{ path('app_option_index') }}" class="btn btn-primary">Retour à la liste</a>
+                {{ include('option/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

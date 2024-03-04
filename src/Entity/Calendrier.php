@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CalendrierRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CalendrierRepository::class)]
@@ -11,25 +10,42 @@ class Calendrier
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDisponible = null;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $dateDebut = null;
+
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $dateFin = null;
+
+    // Ajoutez ici les propriétés et les méthodes nécessaires
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDateDisponible(): ?\DateTimeInterface
+    public function getDateDebut(): ?\DateTimeInterface
     {
-        return $this->dateDisponible;
+        return $this->dateDebut;
     }
 
-    public function setDateDisponible(\DateTimeInterface $dateDisponible): static
+    public function setDateDebut(\DateTimeInterface $dateDebut): self
     {
-        $this->dateDisponible = $dateDisponible;
+        $this->dateDebut = $dateDebut;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->dateFin;
+    }
+
+    public function setDateFin(\DateTimeInterface $dateFin): self
+    {
+        $this->dateFin = $dateFin;
 
         return $this;
     }

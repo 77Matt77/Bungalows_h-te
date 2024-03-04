@@ -1,96 +1,54 @@
 {% extends 'bases/base.html.twig' %}
 
-
 {% block title %}Bungalows d'hôtes{% endblock %}
 
-
-
 {% block main %}
-	<main>
-		<h1 class="text-center">Bungalows d'hôtes</h1>
 
-		<div class="row row-cols-1 row-cols-md-3 g-4">
-			{% for bungalow in bungalows %}
-				<div class="col">
-					<div class="card h-100">
-						<img src="{{ bungalow.image }}" class="card-img-top" alt="...">
-						<div class="card-body bg-white">
-							<h5 class="card-title">{{ bungalow.title|raw }}</h5>
-							<p class="card-text">{{ bungalow.description }}</p>
-							<div class="d-grid">
-								<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ bungalow.id }}">
-									Plus de détails
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
-		</div>
+<main>
 
-		{% for bungalow in bungalows %}
-			<div class="modal fade" id="staticBackdrop{{ bungalow.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel{{ bungalow.id }}" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-scrollable">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="staticBackdropLabel{{ bungalow.id }}">{{ bungalow.title|raw }}</h1>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body ">
-							<h2>{{ bungalow.title|raw }}</h2>
-							<p>{{ bungalow.description }}</p>
-							<p>Descriptions :</p>
-							<p>Nombre de chambres :{{ bungalow.bedrooms|raw }}</p>
-							<p>{{bungalow.equipments|raw}}</p>
-							<p>Prix par nuit :{{ bungalow.price }}
-								€</p>
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-		<div class="restauration">
-			<div class="card mb-3" style="max-width: 100%;">
-				<div class="row g-0">
-					<div class="col-md-4">
-						<img src="{{asset("salleAMangerCuisine.jpg")}}" class="img-fluid rounded-start" alt="Restauration" >
-					</div>
-					<div class="col-md-8">
-						<div class="card-body">
-							<h5 class="card-title">Découvrez la délicieuse cuisine polynésienne Authentique et internationale, dans notre restaurant en bord du Lagon.</h5>
-							<p class="card-text"><br>Plongez dans une expérience culinaire immersive en savourant notre délicieuse cuisine polynésienne, mettant en valeur des saveurs exotiques et des ingrédients locaux frais. Laissez-vous emporter par un voyage gustatif unique au cœur du Pacifique.</p>								
-							<p class="card-text">Notre restaurant en bord du lagon offre une variété internationale de plats exquis, répondant aux goûts de chaque convive. Que vous soyez amateur de plats locaux ou de mets internationaux, notre menu diversifié saura satisfaire toutes les papilles.</p>	
-							<p class="card-text">Optez pour la formule demi-pension et libérez-vous du souci des repas. Profitez de déjeuners délicieux et de dîners exquis, laissant ainsi plus de temps pour explorer les merveilles de l'île et vous détendre sans contraintes.</p>
-							<p class="card-text">Choisissez la formule tout inclus pour une expérience sans souci. Avec des déjeuners copieux et des dîners gastronomiques à midi et le soir, vous pourrez vous concentrer pleinement sur la détente et la découverte.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
-{% endblock %}
+    <h1 class="text-center">Bungalows d'hôtes</h1>
 
-{% block footer %}
-	<footer>
-		<div class="contact-info">
-			<h4>Coordonnées:</h4>
-			<p>Adresse : 7, Rue du Paradis, Polynésie</p>
-			<p>Téléphone : +787 878 787</p>
-			<p>Email : eden@emma-polynesia.com</p>
-		</div>
+    <div class="row">
+        {% for bungalow in bungalows %}
+        <div class="col col-sm-6 col-md-6 col-lg-4">
+            <div class="card h-100">
+                {% for image in bungalow.images %}
+    				<img src="{{ asset('images/' ~ image.nom) }}" alt="Image">
+				{% endfor %}
 
-		<div class="legal-notice">
-			<h4>Mentions Légales:</h4>
-			<p>Ce site est une démo fictive à des fins d'exemple pour le projet.</p>
-			<p>Tous droits réservés © 2023 Bungalows Polynésie.</p>
-		</div>
+                <div class="card-body bg-white">
+                    <h5 class="card-title">{{ bungalow.name }}</h5>
+                    <p class="card-text">{{ bungalow.description }}</p>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ bungalow.id }}">
+                            Plus de détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="modal{{ bungalow.id }}" tabindex="-1" aria-labelledby="modal{{ bungalow.id }}Label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal{{ bungalow.id }}Label">{{ bungalow.name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ bungalow.description }}</p>
+                        <p>Capacité : {{ bungalow.capaciter }}</p>
+                        <p>Prix par nuit : {{ bungalow.pricePerNight }}€</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
-		<div class="site-map">
-			<h4>Plan du Site:</h4>
-			<ul>
-				<li><a href="{{path("vers_accueil_index")}}">Voir les Bungalows d'hôtes</a></li>
-			</ul>
-		</div>
-	</footer>
+</main>
+
 {% endblock %}

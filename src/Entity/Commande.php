@@ -22,15 +22,15 @@ class Commande
     #[ORM\Column]
     private ?float $prix = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Commande')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commandes')]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: Reservation::class)]
-    private Collection $Reservation;
+    private Collection $reservations;
 
     public function __construct()
     {
-        $this->Reservation = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,15 +77,15 @@ class Commande
     /**
      * @return Collection<int, Reservation>
      */
-    public function getReservation(): Collection
+    public function getReservations(): Collection
     {
-        return $this->Reservation;
+        return $this->reservations;
     }
 
     public function addReservation(Reservation $reservation): static
     {
-        if (!$this->Reservation->contains($reservation)) {
-            $this->Reservation->add($reservation);
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
             $reservation->setCommande($this);
         }
 
@@ -94,7 +94,7 @@ class Commande
 
     public function removeReservation(Reservation $reservation): static
     {
-        if ($this->Reservation->removeElement($reservation)) {
+        if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
             if ($reservation->getCommande() === $this) {
                 $reservation->setCommande(null);

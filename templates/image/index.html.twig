@@ -1,0 +1,45 @@
+{% extends "bases/admin.html.twig" %}
+
+{% block title %}Images{% endblock %}
+
+{% block description %}Images{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <h1 class="mt-5">Image index</h1>
+
+        <div class="table-responsive mt-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for image in images %}
+                        <tr>
+                            <td>{{ image.id }}</td>
+                            <td>{{ image.nom }}</td>
+                            <td>
+                                <img src="{{ asset('images/' ~ image.nom) }}" alt="{{ image.nom }}" class="img-thumbnail" style="max-width: 150px;">
+                            </td>
+                            <td>
+                                <a href="{{ path('app_image_show', {'id': image.id}) }}" class="btn btn-primary btn-sm me-2 mt-5">Montrer</a>
+                                <a href="{{ path('app_image_edit', {'id': image.id}) }}" class="btn btn-secondary btn-sm mt-5">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">Aucun enregistrement trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="{{ path('app_image_new') }}" class="btn btn-success mt-3">Nouvelle image</a>
+    </div>
+{% endblock %}

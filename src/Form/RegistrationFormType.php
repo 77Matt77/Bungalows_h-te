@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 class RegistrationFormType extends AbstractType
@@ -31,9 +32,9 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-'constraints' => [
-    new IsTrue([
-        'message' => 'Veuiller accepter les termes d\'utilisation.',
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Veuiller accepter les termes d\'utilisation.',
     ]),
 ],
 ])
@@ -46,4 +47,17 @@ class RegistrationFormType extends AbstractType
             'data_class' => User::class,
         ]);
     }
+    public function validatePasswords($plainPasswordConfirm, ExecutionContextInterface $context)
+{
+    $form = $context->getRoot();
+    $plainPassword = $form->get('plainPassword')->getData();
+    $plainPasswordConfirm = $form->get('plainPasswordConfirm')->getViewData(); // Obtention de la valeur brute
+
+    if ($plainPassword !== $plainPasswordConfirm) {
+        $context->buildViolation('Les mots de passe ne correspondent pas')
+            ->atPath('plainPassword') // Ciblage du champ "plainPassword"
+            ->addViolation();
+    }
+}
+
 }

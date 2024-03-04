@@ -1,13 +1,45 @@
-<!DOCTYPE html>
+{% extends "bases/admin.html.twig" %}
 
-<title>Edit Bungalow</title>
+{% block title %}Edit Bungalow{% endblock %}
 
-{% block body %}
-    <h1>Edit Bungalow</h1>
+{% block description %}Edit Bungalow{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        main {
+            background-color: #ffbf66;
+            height: 100%;
+            font-family: 'Cherry Swash', serif;
+        }
+        button, .button {
+            text-decoration: none;    
+            border-radius: 5px;    
+            color: black;
+            background-color: #08c5d1;
+        }
+        .table {
+            margin-top: 1%;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <h1 class="text-center">Edit Bungalow</h1>
 
     {{ include('bungalow/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_bungalow_index') }}">retour à la liste</a>
+    <a href="{{ path('admin_bungalow_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
 
     {{ include('bungalow/_delete_form.html.twig') }}
 {% endblock %}
+
+
+
+
+
+

@@ -1,38 +1,44 @@
-<!DOCTYPE html>
-
-<title>Bungalow</title>
-
-{% block body %}
-    <h1>Bungalow</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ bungalow.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ bungalow.nom }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ bungalow.description }}</td>
-            </tr>
-            <tr>
-                <th>Capaciter</th>
-                <td>{{ bungalow.capaciter }}</td>
-            </tr>
-            <tr>
-                <th>PrixParNuit</th>
-                <td>{{ bungalow.prixParNuit }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_bungalow_index') }}">retour à la liste</a>
-
-    <a href="{{ path('app_bungalow_edit', {'id': bungalow.id}) }}">edit</a>
-
-    {{ include('bungalow/_delete_form.html.twig') }}
+{% extends "bases/admin.html.twig" %}
+{% block title %}
+    Bungalow
 {% endblock %}
+
+
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Détails du Bungalow</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Id:</strong> {{ bungalow.id }}</li>
+                            <li class="list-group-item"><strong>Nom:</strong> {{ bungalow.name }}</li>
+                            <li class="list-group-item"><strong>Description:</strong> {{ bungalow.description }}</li>
+                            <li class="list-group-item"><strong>Capacité:</strong> {{ bungalow.capaciter }}</li>
+                            <li class="list-group-item"><strong>Prix par Nuit:</strong> {{ bungalow.pricePerNight }}</li>
+                            <li class="list-group-item">
+                                <strong>Images:</strong>
+                                <div class="row mt-2">
+                                    {% for image in bungalow.images %}
+                                        <div class="col-6 mb-3">
+                                            <img src="{{ asset('images/' ~ image.nom) }}" alt="Image" class="img-fluid rounded">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_bungalow_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                        <a href="{{ path('app_bungalow_edit', {'id': bungalow.id}) }}" class="btn btn-primary me-2">Modifier</a>
+                        {{ include('bungalow/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
