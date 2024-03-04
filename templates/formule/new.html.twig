@@ -1,0 +1,21 @@
+{% extends "bases/admin.html.twig" %}
+
+{% block title %}Création d'une nouvelle formule{% endblock %}
+
+{% block description %}Formulaire de création d'une nouvelle formule{% endblock %}
+
+{% block main %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Création d'une nouvelle formule</h1>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {{ include('formule/_form.html.twig') }}
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ path('app_formule_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

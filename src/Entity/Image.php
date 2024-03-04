@@ -4,6 +4,11 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[Vich\Uploadable]
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
@@ -13,13 +18,13 @@ class Image
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Le nom de l'image ne peut pas être vide.")]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $chemin = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Image')]
+    #[ORM\ManyToOne(targetEntity: Bungalow::class, inversedBy: 'images')]
+    #[ORM\JoinColumn(name: "bungalow_id", referencedColumnName: "id", nullable: false)]
     private ?Bungalow $bungalow = null;
 
     public function getId(): ?int
@@ -39,18 +44,6 @@ class Image
         return $this;
     }
 
-    public function getChemin(): ?string
-    {
-        return $this->chemin;
-    }
-
-    public function setChemin(string $chemin): static
-    {
-        $this->chemin = $chemin;
-
-        return $this;
-    }
-
     public function getBungalow(): ?Bungalow
     {
         return $this->bungalow;
@@ -59,6 +52,28 @@ class Image
     public function setBungalow(?Bungalow $bungalow): static
     {
         $this->bungalow = $bungalow;
+
+        return $this;
+    }
+
+    /**
+ * NOTE: This is not an ORM-mapped field of entity metadata, just a simple property.
+ *
+ * @Vich\UploadableField(mapping="bungalow_image", fileNameProperty="nom")
+ * @var File|null
+ */
+    #[Vich\UploadableField(mapping: "bungalow_image", fileNameProperty: "nom")]
+    private ?File $imageFile = null;
+    
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile): static
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }

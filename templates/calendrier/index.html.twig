@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier index</title>
+    <!-- Link Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="mb-4">Calendrier index</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for calendrier in calendriers %}
+            <tr>
+                <td>{{ calendrier.id }}</td>
+                <td>{{ calendrier.dateDebut ? calendrier.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ calendrier.dateFin ? calendrier.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_calendrier_show', {'id': calendrier.id}) }}" class="btn btn-primary me-2">Show</a>
+                    <a href="{{ path('app_calendrier_edit', {'id': calendrier.id}) }}" class="btn btn-secondary">Edit</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No records found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_calendrier_new') }}" class="btn btn-success">Create new</a>
+
+    <!-- Link Bootstrap JS and dependencies if required -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+z5kaMl5iu/4Ys4yZxQlsv8aV8nG0qnNw5n0Q1M" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+z5kaMl5iu/4Ys4yZxQlsv8aV8nG0qnNw5n0Q1M" crossorigin="anonymous"></script>
+</body>
+
+</html>

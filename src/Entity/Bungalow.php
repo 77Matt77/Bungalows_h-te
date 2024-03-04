@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BungalowRepository::class)]
+
 class Bungalow
 {
     #[ORM\Id]
@@ -17,31 +18,35 @@ class Bungalow
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: "text")]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $capaciter = null;
+    #[ORM\Column(name: "capaciter", type: Types::INTEGER)]
+    private ?int $capaciter = null; // Corrected from 'capaciter' to 'capacity'
 
-    #[ORM\Column]
-    private ?float $prixParNuit = null;
+    #[ORM\Column(name: "price_per_night", type: "float")]
+    private ?float $pricePerNight = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Bungalow')]
-    private ?Reservation $reservation = null;
+    #[ORM\Column(type: "boolean", nullable: true)]
+    private ?bool $activation = null;
 
-    
+      /**
+     * @ORM\OneToMany(mappedBy="bungalow", targetEntity="Reservation")
+     */
+    private Collection $reservations;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Calendrier $Calendrier = null;
+    #[ORM\OneToMany(mappedBy: "bungalow", targetEntity: Image::class)]
+    private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'bungalow', targetEntity: Image::class)]
-    private Collection $Image;
+    #[ORM\OneToOne(cascade: ["persist", "remove"])]
+    private ?Calendrier $calendrier = null;
 
     public function __construct()
     {
-        $this->Image = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,15 +54,14 @@ class Bungalow
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $name): static
     {
-        $this->nom = $nom;
-
+        $this->name = $name;
         return $this;
     }
 
@@ -69,7 +73,6 @@ class Bungalow
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -81,75 +84,95 @@ class Bungalow
     public function setCapaciter(int $capaciter): static
     {
         $this->capaciter = $capaciter;
-
         return $this;
     }
 
-    public function getPrixParNuit(): ?float
+    public function getPricePerNight(): ?float
     {
-        return $this->prixParNuit;
+        return $this->pricePerNight;
     }
 
-    public function setPrixParNuit(float $prixParNuit): static
+    public function setPricePerNight(float $pricePerNight): static
     {
-        $this->prixParNuit = $prixParNuit;
-
+        $this->pricePerNight = $pricePerNight;
         return $this;
     }
 
-    public function getReservation(): ?Reservation
+    public function getActivation(): ?bool
     {
-        return $this->reservation;
+        return $this->activation;
     }
 
-    public function setReservation(?Reservation $reservation): static
+    public function setActivation(?bool $activation): static
     {
-        $this->reservation = $reservation;
-
+        $this->activation = $activation;
         return $this;
     }
 
-    
-
-    public function getCalendrier(): ?Calendrier
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
     {
-        return $this->Calendrier;
+        return $this->reservations;
     }
 
-    public function setCalendrier(?Calendrier $Calendrier): static
+    public function addReservation(Reservation $reservation): static
     {
-        $this->Calendrier = $Calendrier;
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setBungalow($this);
+        }
+        return $this;
+    }
 
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getBungalow() === $this) {
+                $reservation->setBungalow(null);
+            }
+        }
         return $this;
     }
 
     /**
      * @return Collection<int, Image>
      */
-    public function getImage(): Collection
+    public function getImages(): Collection
     {
-        return $this->Image;
+        return $this->images;
     }
 
     public function addImage(Image $image): static
     {
-        if (!$this->Image->contains($image)) {
-            $this->Image->add($image);
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
             $image->setBungalow($this);
         }
-
         return $this;
     }
 
     public function removeImage(Image $image): static
     {
-        if ($this->Image->removeElement($image)) {
+        if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
             if ($image->getBungalow() === $this) {
                 $image->setBungalow(null);
             }
         }
+        return $this;
+    }
 
+    public function getCalendrier(): ?Calendrier
+    {
+        return $this->calendrier;
+    }
+
+    public function setCalendrier(?Calendrier $calendrier): static
+    {
+        $this->calendrier = $calendrier;
         return $this;
     }
 }

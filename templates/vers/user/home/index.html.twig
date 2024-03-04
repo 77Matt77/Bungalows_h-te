@@ -1,9 +1,71 @@
-{% extends "bases/user.html.twig" %}
+{% extends 'bases/user.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
-
-{% block description %}Accueil{% endblock %}
+{% block title %}Tableau de Bord Utilisateur{% endblock %}
 
 {% block main %}
-    <h1 class=" my-3 display-5">Espace utilisateur</h1>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path("vers_accueil_index") }}"><img src="{{ asset("img/logo.jpg") }}" alt="logo" style="border-radius: 10%;"></a>
+            <a class="navbar-brand" href="{{ path("admin_home_index") }}"></i></a>			
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item ms-5">
+                    <a class="nav-link" href="{{ path("vers_accueil_index") }}">Retour au site</a>
+                </li>
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="{{ path("app_logout") }}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>			
+    </nav>
+
+    <h1>{{ welcomeMessage }}</h1>
+    <p>Dernière connexion : {{ lastLogin|date('d/m/Y H:i:s') }}</p>
+
+    <!-- Affichage des bungalows -->
+    {% if bungalows %}
+        <h2>Bungalows Disponibles</h2>
+        <ul>
+            {% for bungalow in bungalows %}
+                <li>
+                    <a href="{{ path('user_home_bungalow', {'id': bungalow.id}) }}">{{ bungalow.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun bungalow disponible pour le moment.</p>
+    {% endif %}
+
+    <!-- Bouton pour ouvrir la modal -->
+    <button type="button" class="btn btn-primary" onclick="showModal()">Ouvrir la modal</button>
+
+    <!-- Modals -->
+    {% for i in 1..6 %}
+    <div class="modal fade" id="staticBackdrop{{ i }}" tabindex="-1" aria-labelledby="staticBackdropLabel{{ i }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel{{ i }}">Modal Title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>Bungalow Moorea</h2>
+                    <p>
+                        <!-- Contenu de la modal -->
+                        <!-- ... -->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/modal.js') }}"></script>
+{% endblock %}
+

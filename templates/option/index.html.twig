@@ -1,0 +1,45 @@
+{% extends "bases/admin.html.twig" %}
+
+{% block title %}Liste des options{% endblock %}
+
+{% block description %}Liste des options{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center mb-4">Options</h1>
+                <a href="{{ path('app_option_new') }}" class="btn btn-primary mb-3">Créer une nouvelle option</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Prix</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for option in options %}
+                        <tr>
+                            <td>{{ option.id }}</td>
+                            <td>{{ option.nom }}</td>
+                            <td>{{ option.description }}</td>
+                            <td>{{ option.prix }}</td>
+                            <td>
+                                <a href="{{ path('app_option_show', {'id': option.id}) }}" class="btn btn-primary w-100 my-2">Voir</a>
+                                <a href="{{ path('app_option_edit', {'id': option.id}) }}" class="btn btn-warning w-100 my-2">Modifier</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun enregistrement trouvé.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "bases/admin.html.twig" %}
+
+{% block title %}
+    <title>New Image</title>
+{% endblock %}
+
+{% block main %}
+    <h1>Create new Image</h1>
+
+    <form action="{{ path('app_image_new') }}" method="POST">
+
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" value="Create">Create</button>
+
+        {{ form_end(form) }}
+    </form>
+
+    <a href="{{ path('app_image_index') }}">back to list</a>
+{% endblock %}
+

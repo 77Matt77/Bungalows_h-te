@@ -3,3 +3,21 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+app_image_create:
+    path: /image/new
+    controller: App\Controller\ImageController::new
+    methods: [GET, POST]
+
+# config/routes.yaml
+
+app_image_show:
+    path: /image/{id}
+    controller: App\Controller\ImageController::show
+    methods: GET
+
+app_bungalow_index:
+    path: /bungalows
+    controller: App\Controller\BungalowController::index
+    methods: GET
+

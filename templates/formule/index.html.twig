@@ -1,0 +1,56 @@
+{% extends "bases/admin.html.twig" %}
+
+{% block title %}Liste des Formules
+{% endblock %}
+
+{% block description %}Liste des Formules
+{% endblock %}
+
+{% block main %}
+	<div class="container mt-4 ">
+		<h1 class="text-center my-3 display-2">Espace formules</h1>
+
+		<div class="row mb-3">
+			<div
+				class="col-md-6 offset-md-1">
+				<!-- Modifié offset-md-2 -->
+				<a href="{{ path('app_formule_new') }}" class="btn btn-success btn-lg btn-block">Création d'une nouvelle formule</a>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-10 offset-md-1">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nom</th>
+							<th>Description</th>
+							<th>Prix</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for formule in formules %}
+							<tr>
+								<td>{{ formule.id }}</td>
+								<td>{{ formule.nom }}</td>
+								<td>{{ formule.description }}</td>
+								<td>{{ formule.prix }}</td>
+								<td>
+									<a href="{{ path('app_formule_show', {'id': formule.id}) }}" class="btn btn-primary w-100 my-2">Voir</a>
+									<a href="{{ path('app_formule_edit', {'id': formule.id}) }}" class="btn btn-warning w-100 my-2">Modifier</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="5">Aucun enregistrement trouvé</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
